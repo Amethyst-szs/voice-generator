@@ -1,40 +1,54 @@
 const input = require("input");
-const chalk = require("chalk");
+var fs = require('fs');
 
 module.exports = {
-    ScreenFormat: async function() {
-        console.clear();
-        console.log(chalk.hex(`#ff0051`).bold(`Amethyst's Voice Line Tool\n--------------------------`))
-    },
-
     SingleOrBatch: async function() {
-        return await input.select(`Are you generating a single voice line or an entire batch?`, [`Single`, `Batch`]);
-    },
-
-    CollectSourceText: async function(Mode) {
-        if(Mode==undefined) { return `Error!`; }
-
-        if(Mode==`Single`)
-        {
-            return await input.text(`What text would you like to use?`);
-        }
-        else if (Mode==`Batch`)
-        {
-            return await input.text(`Provide the file path towards your batch file: `);
+        UserInput = await input.select(`Are you generating a single voice line or an entire batch?`, [`Single`, `Batch`]);
+        switch(UserInput){
+            case `Single`:
+                return false;
+            case `Batch`:
+                return true;
         }
     },
 
-    DefaultEmotion: async function()
+    CollectSourceText: async function(bBatch) {
+        if(bBatch==undefined) { return `Error!`; }
+        switch(bBatch){
+            case false:
+                return await input.text(`What text would you like to use?`);
+            case true:
+                InputPath = await input.text(`Provide the file path towards your batch file:`);
+                AllText = fs.readFileSync(InputPath, `utf-8`);
+                AllTextArray = AllText.split(`\n`);
+                for(i=0;i<AllTextArray.length;i++)
+                {
+                    if(AllTextArray[i].startsWith(`#`) || AllTextArray[i].length <= 2)
+                    { 
+                        AllTextArray.splice(i, 1);
+                        i--
+                    }
+                }
+                return AllTextArray;
+        }
+    },
+
+    DefaultEmotion: async function(bBatch)
     {
-        return await input.select(`Select the voice line's emotion?`,
-        [`Neutral`,
-        `Proud`,
-        `Sad`,
-        `Nervous`,
-        `Angry`,
-        `Depressed`,
-        `Amused`,
-        `Ecstatic`]);
+        switch(bBatch) {
+            case false:
+                return await input.select(`Select the voice line's emotion?`,
+                [`Neutral`,
+                `Proud`,
+                `Sad`,
+                `Nervous`,
+                `Angry`,
+                `Depressed`,
+                `Amused`,
+                `Ecstatic`]);
+            case true:
+                return `Empty`;
+        }
     },
 
     DefineBPC: async function() {
