@@ -18,7 +18,7 @@
   "homepage": "https://github.com/Amethyst-szs/voice-generator#readme",
   "dependencies": {
     "chalk": "^4.1.0",
-    "wavefile": "^11.0.0",
-    "yargs": "^16.2.0"
+    "input": "^1.0.1",
+    "wavefile": "^11.0.0"
   }
 }
