@@ -1,2 +1,2 @@
 # voice-generator
-Generates wav files for voicing text
+Generates wav files for speaking text in blips

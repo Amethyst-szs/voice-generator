@@ -1,0 +1,19 @@
+{
+  "name": "voice-generator",
+  "version": "1.0.0",
+  "description": "Generates wav files for speaking text in blips",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Amethyst-szs/voice-generator.git"
+  },
+  "author": "Amethsyt-szs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Amethyst-szs/voice-generator/issues"
+  },
+  "homepage": "https://github.com/Amethyst-szs/voice-generator#readme"
+}
