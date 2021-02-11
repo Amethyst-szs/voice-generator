@@ -1,8 +1,7 @@
 var fs = require('fs');
-const wavefile = require('wavefile');
 
 module.exports = {
-    FindAllSoundFiles: async function(Emotion){
+    FindAllSoundFiles: function(Emotion){
         AllSoundFiles = fs.readdirSync(`D:/Vids/Voices/Amethyst/${Emotion}/`);
         for(i=0;i<AllSoundFiles.length;i++){
             if(!AllSoundFiles[i].includes(".wav")) {
@@ -12,9 +11,5 @@ module.exports = {
             }
         }
         return AllSoundFiles;
-    },
-
-    FindSamplesFromFile: async function(File){
-        
     }
 }

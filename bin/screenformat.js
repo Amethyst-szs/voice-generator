@@ -1,11 +1,11 @@
 const chalk = require("chalk");
 
 module.exports = {
-    ResetScreen: async function() {
+    ResetScreen: function() {
         console.clear();
-        console.log(chalk.hex(`#ff0051`).bold(`Amethyst's Voice Line Tool\n--------------------------`))
+        console.log(chalk.hex(`#ff0051`).bold(`\n\nAmethyst's Voice Line Tool\n--------------------------`))
     },
-    DrawProgressBar: async function(Current, Target, Size, Message){
+    DrawProgressBar: function(Current, Target, Size, Message){
         CurrentSymbol = 0;
         BarInside = ``;
         while (CurrentSymbol<Size)
@@ -20,7 +20,20 @@ module.exports = {
             }
             CurrentSymbol++
         }
-        BarInside.repeat(Current*(Math.floor(Target/Size)));
-        console.log(chalk.hex(`#007db3`).bold(`\n${Message}\n[${BarInside}]`))
+        console.log(chalk.hex(`#00ade3`).bgHex(`#3f0011`).bold(`\n${Message}\n[${BarInside}] ${Math.round((Current/Target)*100)}%`))
+    },
+    DrawVariable: function(Title, Value){
+        console.log(chalk.hex(`#00ade3`).bgHex(`#3f0011`).bold(`\n${Title}: ${Value}`));
+        return;
+    },
+    DrawDivider: function(Size){
+        Divider = ``;
+        for(i=0;i<Size;i++){
+            Divider += `-`;
+        }
+        console.log(chalk.hex(`#ff0051`).bold(`\n${Divider}`));
+    },
+    DrawComplete: function(){
+        console.log(chalk.hex(`#00ddff`).bgHex(`#3f0011`).bold(`\n\nExporting is complete!\nYou can find your files in the output folder`));
     }
 }

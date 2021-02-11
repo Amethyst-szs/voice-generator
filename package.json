@@ -19,6 +19,7 @@
   "dependencies": {
     "chalk": "^4.1.0",
     "input": "^1.0.1",
+    "sound-play": "^1.1.0",
     "wavefile": "^11.0.0"
   }
 }

@@ -3,7 +3,7 @@ const wavefile = require('wavefile');
 var fs = require('fs');
 
 module.exports = {
-    FindAllSoundFiles: async function(Emotion){
+    FindAllSoundFiles: function(Emotion){
         AllSoundFiles = fs.readdirSync(`D:/Vids/Voices/Amethyst/${Emotion}/`);
         for(i=0;i<AllSoundFiles.length;i++){
             if(!AllSoundFiles[i].includes(".wav")) {
@@ -15,8 +15,8 @@ module.exports = {
         return AllSoundFiles;
     },
 
-    GetSamplesFromWav: async function(File){
-        await fs.stat(File, function(err, stats) {
+    GetSamplesFromWav: function(File){
+        fs.stat(File, function(err, stats) {
             FileSize = stats.size;
             fs.open(File, 'r', function(errOpen, fd) {
                 fs.read(fd, Buffer.alloc(FileSize), 0, FileSize, 0, function(errRead, bytesRead, buffer) {

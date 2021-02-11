@@ -2,10 +2,10 @@ const chalk = require("chalk");
 var fs = require('fs');
 
 module.exports = {
-    ConsolePreMessage: async function() {
+    ConsolePreMessage: function() {
         console.log(chalk.hex(`#007db3`).bold(`Initial setup is currently in progress.\nPlease wait!`))
     },
-    CreateList: async function(AllText, IsEmotionList) {
+    CreateList: function(AllText, IsEmotionList) {
         FinalListArray = [];
         switch(IsEmotionList){
             case true:
