@@ -13,6 +13,15 @@ module.exports = {
         }
     },
 
+    PreviousBlipCheck: function(PreviousBlips, FileSelection) {
+        for(i=0;i<PreviousBlips.length;i++){
+            if(FileSelection == PreviousBlips[i]) {
+                return true;
+            }
+        }
+        return false;
+    },
+
     OutputWav: function(OutputWavArray, ExtraSilenceLength, StartTime) {
         for(i=0;i<ExtraSilenceLength;i++){
             OutputWavArray.push(0);
@@ -21,6 +30,9 @@ module.exports = {
         //Creates File Wav File From OutputWavArray And Writes To Disk
         OutputWave = new wavefile.WaveFile;
         OutputWave.fromScratch(1, 44100, '16', OutputWavArray);
+        if(fs.existsSync(`output`) == false){
+            fs.mkdirSync(`output/`);
+        }
         fs.writeFileSync(`output/${StartTime.getTime()}-${new Date().getTime()}.wav`, OutputWave.toBuffer());
         return; 
     }

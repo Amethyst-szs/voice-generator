@@ -1,10 +1,4 @@
-const chalk = require("chalk");
-var fs = require('fs');
-
 module.exports = {
-    ConsolePreMessage: function() {
-        console.log(chalk.hex(`#007db3`).bold(`Initial setup is currently in progress.\nPlease wait!`))
-    },
     CreateList: function(AllText, IsEmotionList) {
         FinalListArray = [];
         switch(IsEmotionList){
@@ -21,7 +15,8 @@ module.exports = {
                 for(i=0;i<AllText.length;i++)
                 {
                     if(!AllText[i].startsWith(`-`)) {
-                        FinalListArray.push(AllText[i].slice(0, AllText[i].length-1));
+                        ReturnText = AllText[i].slice(0, AllText[i].length-1);
+                        FinalListArray.push(ReturnText);
                     }
                 }
                 return FinalListArray

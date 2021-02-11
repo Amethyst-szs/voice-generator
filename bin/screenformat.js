@@ -35,5 +35,8 @@ module.exports = {
     },
     DrawComplete: function(){
         console.log(chalk.hex(`#00ddff`).bgHex(`#3f0011`).bold(`\n\nExporting is complete!\nYou can find your files in the output folder`));
-    }
+    },
+    DrawAnalysisMessage: function() {
+        console.log(chalk.hex(`#007db3`).bold(`Initial setup is currently in progress.\nPlease wait!`))
+    },
 }

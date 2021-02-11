@@ -6,8 +6,6 @@ PROGRAM SETUP
 /////////////
 */
 
-const sound = require('sound-play');
-const wavefile = require('wavefile');
 const fs = require('fs');
 
 //External javascript code
@@ -21,8 +19,6 @@ const speechgen = require('./speechgen');
 let StartTime = new Date();
 
 let bBatch;
-let TextSource;
-let DefaultEmotion;
 let BPCType;
 let BPCUsage;
 let EmotionList;
@@ -60,43 +56,65 @@ async function SetupProcess()
     DefaultEmotion = await homemenu.DefaultEmotion(bBatch);
     //Lets the user pick the BPC
     BPCType = await homemenu.DefineBPC();
-
     /*
-    //////////////////////////////////////
-    ANALYSE TEXT FILE (BATCH VERSION ONLY)
-    //////////////////////////////////////
+    ////////////
+    ANALYSE TEXT
+    ////////////
     */
+    screenformat.ResetScreen();
+    screenformat.DrawAnalysisMessage();
+
     //Setup variables
     EmotionList = [];
     StringsList = [];
-    //Create the lists
-    if(bBatch == true)
-    {
-        screenformat.ResetScreen();
-        analyser.ConsolePreMessage();
-    
-        EmotionList = analyser.CreateList(TextSource, true);
-        StringsList = analyser.CreateList(TextSource, false);
+
+    switch(bBatch){
+        case false:
+            EmotionList.push(DefaultEmotion);
+            StringsList.push(TextSource);
+        case true:
+            EmotionList = analyser.CreateList(TextSource, true);
+            StringsList = analyser.CreateList(TextSource, false);
     }
-    else
-    {
-        EmotionList.push(DefaultEmotion);
-        StringsList.push(TextSource);
-    }
+
     AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString]);
     setTimeout(AssetLoading, 100);
+}
+
+async function AssetLoading()
+{
+    FileSelection = `assets/Amethyst/${EmotionList[CurrentString]}/${AllSoundFiles[CurrentSoundFile]}`;
+    fs.stat(FileSelection, async function(err, stats) {
+        fs.open(FileSelection, 'r', async function(errOpen, fd) {
+            fs.read(fd, Buffer.alloc(stats.size), 0, stats.size, 0, async function(errRead, bytesRead, buffer) {
+                AllSoundSamples.push(assetloader.GetSamplesFromBuffer(buffer));
+                CurrentSoundFile++;
+                if(CurrentSoundFile<AllSoundFiles.length){
+                    //If there are more waves to load, this condition is called
+                    screenformat.ResetScreen();
+                    screenformat.DrawVariable(`Emotion`, EmotionList[CurrentString]);
+                    screenformat.DrawVariable(`Current Wave File`, FileSelection);
+                    screenformat.DrawDivider(20);
+                    screenformat.DrawProgressBar(CurrentSoundFile, AllSoundFiles.length, 45, `Loading wavs for current emotion...`)
+                    if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Collection Progress`);}
+                    setTimeout(AssetLoading, 10);
+                } else {
+                    //If all waves are loaded, this condition is called
+                    screenformat.ResetScreen();
+                    BPCUsage = speechgen.BPCPrepare(BPCType, StringsList[CurrentString].length);
+                    SpeechWriting();
+                }
+            });
+        });
+    });
 }
 
 function SpeechWriting()
 {
     FileSelection = `${Math.floor(Math.random() * Math.floor(AllSoundFiles.length))}`;
-    //Check for repeat sound
-    for(i=0;i<PreviousBlips.length;i++)
-    {
-        if(FileSelection == PreviousBlips[i]) {
-            setTimeout(SpeechWriting, 10);
-            return;
-        }
+    if(speechgen.PreviousBlipCheck(PreviousBlips, FileSelection) == true){
+        setTimeout(SpeechWriting, 20);
+        return;
     }
 
     //Update the list of previous blips to avoid repetition
@@ -107,37 +125,29 @@ function SpeechWriting()
     for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){
         OutputWavArray.push(AllSoundSamples[FileSelection][Samp]);
     }
-
+    //At this point it's complete and the Current Character can be increased
     CurrentChar++;
     
     if(CurrentChar >= StringsList[CurrentString].length/BPCUsage)
-    { 
-        sound.play('assets/Amethyst/Neutral/Neutral1.wav', 1);
+    {
+        //This condition is triggered if wave generation is complete
         speechgen.OutputWav(OutputWavArray, 10000, StartTime);
-        if(CurrentString+1 >= StringsList.length){
-            screenformat.DrawComplete();
-            return;
-        }
-        else
-        {
-            CurrentString++;
+        screenformat.DrawComplete();
+        CurrentString++;
+        if(CurrentString+1 <= StringsList.length){
+            //This condition is triggered if a batch has more strings to create
+            //Reset variables
+            CurrentSoundFile = 0;
+            AllSoundSamples = [];
+            AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString]);
             CurrentChar = 0;
             OutputWavArray = [];
-            if(EmotionList[CurrentString-1] == EmotionList[CurrentString])
-            {
-                SpeechWriting();
-            }
-            else
-            {
-                CurrentSoundFile = 0;
-                AllSoundSamples = [];
-                AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString]);
-                AssetLoading();
-            }
+            AssetLoading();
         }
     }
     else
     {
+        //This condition is triggered if wave generation is incomplete
         screenformat.ResetScreen();
         screenformat.DrawVariable(`Current String: `, StringsList[CurrentString]);
         screenformat.DrawVariable(`Recently Selected Blips: `, PreviousBlips);
@@ -147,41 +157,4 @@ function SpeechWriting()
         SpeechWriting();
     }
 }
-
-async function AssetLoading()
-{
-    FileSelection = `assets/Amethyst/${EmotionList[CurrentString]}/${AllSoundFiles[CurrentSoundFile]}`;
-    
-    //Open File
-    fs.stat(FileSelection, async function(err, stats) {
-        FileSize = stats.size;
-        fs.open(FileSelection, 'r', async function(errOpen, fd) {
-            fs.read(fd, Buffer.alloc(FileSize), 0, FileSize, 0, async function(errRead, bytesRead, buffer) {
-                //Gather Samples From File
-                wav = new wavefile.WaveFile();
-                await wav.fromBuffer(buffer);
-                Samps = await wav.getSamples()
-                AllSoundSamples.push(Samps);
-                CurrentSoundFile++;
-                if(CurrentSoundFile<AllSoundFiles.length)
-                {
-                    screenformat.ResetScreen();
-                    screenformat.DrawVariable(`Emotion`, EmotionList[CurrentString]);
-                    screenformat.DrawVariable(`Current Wave File`, FileSelection);
-                    screenformat.DrawDivider(20);
-                    screenformat.DrawProgressBar(CurrentSoundFile, AllSoundFiles.length, 45, `Loading wavs for current emotion...`)
-                    if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Collection Progress`);}
-                    setTimeout(AssetLoading, 10);
-                }
-                else
-                {
-                    screenformat.ResetScreen();
-                    BPCUsage = speechgen.BPCPrepare(BPCType, StringsList[CurrentString].length);
-                    SpeechWriting();
-                }
-            });
-        });
-    });
-}
-
 SetupProcess();
