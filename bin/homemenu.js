@@ -33,7 +33,7 @@ module.exports = {
         }
     },
 
-    DefaultEmotion: async function(bBatch)
+    SingleEmotion: async function(bBatch)
     {
         switch(bBatch) {
             case false:

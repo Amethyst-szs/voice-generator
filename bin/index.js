@@ -21,8 +21,8 @@ let StartTime = new Date();
 let bBatch;
 let BPCType;
 let BPCUsage;
-let EmotionList;
-let StringsList;
+let EmotionList = [];
+let StringsList = [];
 
 let AllSoundFiles = [];
 let AllSoundSamples = [];
@@ -53,7 +53,7 @@ async function SetupProcess()
     //Gets the text string or batch file contents
     TextSource = await homemenu.CollectSourceText(bBatch);
     //If using a single string, allows the user to input an emotion
-    DefaultEmotion = await homemenu.DefaultEmotion(bBatch);
+    SingleEmotion = await homemenu.SingleEmotion(bBatch);
     //Lets the user pick the BPC
     BPCType = await homemenu.DefineBPC();
     /*
@@ -64,19 +64,17 @@ async function SetupProcess()
     screenformat.ResetScreen();
     screenformat.DrawAnalysisMessage();
 
-    //Setup variables
-    EmotionList = [];
-    StringsList = [];
-
     switch(bBatch){
         case false:
-            EmotionList.push(DefaultEmotion);
-            StringsList.push(TextSource);
+            EmotionList = [SingleEmotion];
+            StringsList = [TextSource];
+            break;
         case true:
             EmotionList = analyser.CreateList(TextSource, true);
             StringsList = analyser.CreateList(TextSource, false);
+            break;
     }
-
+    console.log(SingleEmotion, bBatch, EmotionList[CurrentString], EmotionList, CurrentString);
     AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString]);
     setTimeout(AssetLoading, 100);
 }
