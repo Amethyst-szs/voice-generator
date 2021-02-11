@@ -120,11 +120,19 @@ function SpeechWriting()
         else
         {
             CurrentString++;
-            CurrentSoundFile = 0;
-            AllSoundSamples = [];
-            AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString]);
+            CurrentChar = 0;
             OutputWavArray = [];
-            AssetLoading();
+            if(EmotionList[CurrentString-1] == EmotionList[CurrentString])
+            {
+                SpeechWriting();
+            }
+            else
+            {
+                CurrentSoundFile = 0;
+                AllSoundSamples = [];
+                AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString]);
+                AssetLoading();
+            }
         }
     }
     else
@@ -134,7 +142,7 @@ function SpeechWriting()
         screenformat.DrawDivider(20);
         screenformat.DrawProgressBar(CurrentChar, StringsList[CurrentString].length/BPCUsage, 45, `Progress generating output wav:`);
         if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Batch Progress`);}
-        setTimeout(SpeechWriting, 25);
+        SpeechWriting();
     }
 }
 
@@ -160,14 +168,13 @@ async function AssetLoading()
                     screenformat.DrawDivider(20);
                     screenformat.DrawProgressBar(CurrentSoundFile, AllSoundFiles.length, 45, `Loading wavs for current emotion...`)
                     if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Batch Progress`);}
-                    setTimeout(AssetLoading, 25);
+                    AssetLoading();
                 }
                 else
                 {
                     screenformat.ResetScreen();
-                    CurrentChar = 0;
                     BPCUsage = speechgen.BPCPrepare(BPCType, StringsList[CurrentString].length);
-                    setTimeout(SpeechWriting, 25);
+                    SpeechWriting();
                 }
             });
         });
