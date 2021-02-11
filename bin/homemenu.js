@@ -3,11 +3,11 @@ var fs = require('fs');
 
 module.exports = {
     SingleOrBatch: async function() {
-        UserInput = await input.select(`Are you generating a single voice line or an entire batch?`, [`Single`, `Batch`]);
+        UserInput = await input.select(`Are you generating a single voice line or an entire collection?`, [`Single`, `Collection`]);
         switch(UserInput){
             case `Single`:
                 return false;
-            case `Batch`:
+            case `Collection`:
                 return true;
         }
     },
@@ -18,7 +18,7 @@ module.exports = {
             case false:
                 return await input.text(`What text would you like to use?`);
             case true:
-                InputPath = await input.text(`Provide the file path towards your batch file:`);
+                InputPath = await input.text(`Provide the file path towards your collection file:`);
                 AllText = fs.readFileSync(InputPath, `utf-8`);
                 AllTextArray = AllText.split(`\n`);
                 for(i=0;i<AllTextArray.length;i++)

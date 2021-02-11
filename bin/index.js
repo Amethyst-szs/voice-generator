@@ -143,7 +143,7 @@ function SpeechWriting()
         screenformat.DrawVariable(`Recently Selected Blips: `, PreviousBlips);
         screenformat.DrawDivider(20);
         screenformat.DrawProgressBar(CurrentChar, StringsList[CurrentString].length/BPCUsage, 45, `Progress generating output wav:`);
-        if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Batch Progress`);}
+        if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Collection Progress`);}
         SpeechWriting();
     }
 }
@@ -170,7 +170,7 @@ async function AssetLoading()
                     screenformat.DrawVariable(`Current Wave File`, FileSelection);
                     screenformat.DrawDivider(20);
                     screenformat.DrawProgressBar(CurrentSoundFile, AllSoundFiles.length, 45, `Loading wavs for current emotion...`)
-                    if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Batch Progress`);}
+                    if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Collection Progress`);}
                     setTimeout(AssetLoading, 10);
                 }
                 else
