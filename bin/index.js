@@ -112,6 +112,7 @@ function SpeechWriting()
     
     if(CurrentChar >= StringsList[CurrentString].length/BPCUsage)
     { 
+        sound.play('assets/Amethyst/Neutral/Neutral1.wav', 1);
         speechgen.OutputWav(OutputWavArray, 10000, StartTime);
         if(CurrentString+1 >= StringsList.length){
             screenformat.DrawComplete();
@@ -139,6 +140,7 @@ function SpeechWriting()
     {
         screenformat.ResetScreen();
         screenformat.DrawVariable(`Current String: `, StringsList[CurrentString]);
+        screenformat.DrawVariable(`Recently Selected Blips: `, PreviousBlips);
         screenformat.DrawDivider(20);
         screenformat.DrawProgressBar(CurrentChar, StringsList[CurrentString].length/BPCUsage, 45, `Progress generating output wav:`);
         if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Batch Progress`);}
@@ -148,7 +150,7 @@ function SpeechWriting()
 
 async function AssetLoading()
 {
-    FileSelection = `D:/Vids/Voices/Amethyst/${EmotionList[CurrentString]}/${AllSoundFiles[CurrentSoundFile]}`;
+    FileSelection = `assets/Amethyst/${EmotionList[CurrentString]}/${AllSoundFiles[CurrentSoundFile]}`;
     
     //Open File
     fs.stat(FileSelection, async function(err, stats) {
@@ -165,10 +167,11 @@ async function AssetLoading()
                 {
                     screenformat.ResetScreen();
                     screenformat.DrawVariable(`Emotion`, EmotionList[CurrentString]);
+                    screenformat.DrawVariable(`Current Wave File`, FileSelection);
                     screenformat.DrawDivider(20);
                     screenformat.DrawProgressBar(CurrentSoundFile, AllSoundFiles.length, 45, `Loading wavs for current emotion...`)
                     if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Batch Progress`);}
-                    AssetLoading();
+                    setTimeout(AssetLoading, 10);
                 }
                 else
                 {

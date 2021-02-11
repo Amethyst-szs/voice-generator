@@ -37,15 +37,8 @@ module.exports = {
     {
         switch(bBatch) {
             case false:
-                return await input.select(`Select the voice line's emotion?`,
-                [`Neutral`,
-                `Proud`,
-                `Sad`,
-                `Nervous`,
-                `Angry`,
-                `Depressed`,
-                `Amused`,
-                `Ecstatic`]);
+                AllFolders = fs.readdirSync(`assets/Amethyst/`);
+                return await input.select(`Select the voice line's emotion?`, AllFolders);
             case true:
                 return `Empty`;
         }
