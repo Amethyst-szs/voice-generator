@@ -7,6 +7,7 @@ PROGRAM SETUP
 */
 
 const fs = require('fs');
+const wavefile = require('wavefile');
 
 //External javascript code
 const homemenu = require('./homemenu');
@@ -29,7 +30,7 @@ let CurrentSoundFile = 0;
 
 let CurrentChar = 0;
 let PreviousBlips = [-1, -1, -1, -1];
-let OutputWavArray = [];
+let OutputWavArray = new Array;
 
 let CurrentString = 0;
 
@@ -87,7 +88,10 @@ async function AssetLoading()
     fs.stat(FileSelection, async function(err, stats) {
         fs.open(FileSelection, 'r', async function(errOpen, fd) {
             fs.read(fd, Buffer.alloc(stats.size), 0, stats.size, 0, async function(errRead, bytesRead, buffer) {
-                AllSoundSamples.push(assetloader.GetSamplesFromBuffer(buffer));
+                wav = new wavefile.WaveFile();
+                await wav.fromBuffer(buffer);
+                Samps = await wav.getSamples()
+                AllSoundSamples.push(Samps);
                 CurrentSoundFile++;
                 if(CurrentSoundFile<AllSoundFiles.length){
                     //If there are more waves to load, this condition is called
@@ -112,6 +116,7 @@ async function AssetLoading()
 function SpeechWriting()
 {
     FileSelection = `${Math.floor(Math.random() * Math.floor(AllSoundFiles.length))}`;
+    // TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage)
     if(speechgen.PreviousBlipCheck(PreviousBlips, FileSelection) == true){
         setTimeout(SpeechWriting, 20);
         return;
@@ -121,9 +126,17 @@ function SpeechWriting()
     PreviousBlips.splice(0, 1);
     PreviousBlips.push(FileSelection);
 
+    // console.log(TextSnip);
+    // console.log(AllSoundSamples[FileSelection], FileSelection);
+
     //Run through all samples in FileSelection and add to OutputWavArray
     for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){
-        OutputWavArray.push(AllSoundSamples[FileSelection][Samp]);
+        // if(TextSnip.includes(`.`)){
+        //     OutputWavArray.push(0);
+        // } else {
+            // console.log(OutputWavArray, Samp);
+            OutputWavArray.push(AllSoundSamples[FileSelection][Samp]);
+        // }
     }
     //At this point it's complete and the Current Character can be increased
     CurrentChar++;
@@ -131,6 +144,7 @@ function SpeechWriting()
     if(CurrentChar >= StringsList[CurrentString].length/CPBUsage)
     {
         //This condition is triggered if wave generation is complete
+        console.log(OutputWavArray);
         speechgen.OutputWav(OutputWavArray, 10000, EmotionList[CurrentString], StringsList[CurrentString].slice(0, 6));
         screenformat.DrawComplete();
         CurrentString++;

@@ -1,5 +1,4 @@
 var fs = require('fs');
-const wavefile = require('wavefile');
 
 module.exports = {
     FindAllSoundFiles: function(Emotion, Character){
@@ -12,11 +11,5 @@ module.exports = {
             }
         }
         return AllSoundFiles;
-    },
-    GetSamplesFromBuffer: async function(buffer){
-        wav = new wavefile.WaveFile();
-        await wav.fromBuffer(buffer);
-        Samps = await wav.getSamples()
-        return Samps;
     }
 }
