@@ -39,4 +39,7 @@ module.exports = {
     DrawAnalysisMessage: function() {
         console.log(chalk.hex(`#007db3`).bold(`Initial setup is currently in progress.\nPlease wait!`))
     },
+    DrawEqualizer: function(WaveData, Size) {
+        console.log(chalk.hex(`#00ddff`).bgHex(`#3f0011`).bold(`\n${WaveData.length}`))
+    }
 }
