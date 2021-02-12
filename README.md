@@ -18,7 +18,7 @@ Next you will be asked for the text or file you want to use. If you chose a sing
 **NOTE: This only occurs if you are doing a single generation.** This will load all folders from `assets/{CharacterChoice}/` and lets you choose an emotion.
 
 ### Setting the CPB
-This part is slightly confusing. CPB (Characters Per Blip) is used to avoid text strings being too long. If you choose automatic it will make a resonable CPB for the text provided, but you can define it manually on a scale of 1-5.
+CPB (Characters Per Blip) is used to avoid text strings being too long. If you choose automatic it will make a resonable CPB for the text provided, but you can define it manually on a scale of 1-5.
 
 ## Output from the program
 So what will this program actually make? After running it will output a wave file for every text string given to it. (These can be found in the `output/` folder) These wave files will be made using the emotion selected. The files will be named in this format: **Time of Completion-Emotion-Text**.
