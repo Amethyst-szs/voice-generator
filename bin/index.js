@@ -15,9 +15,7 @@ const screenformat = require('./screenformat');
 const assetloader = require('./assetloader');
 const speechgen = require('./speechgen');
 
-//Important global variable declarations
-let StartTime = new Date();
-
+//Important global variable declaration
 let bBatch;
 let CPBType;
 let CPBUsage;
