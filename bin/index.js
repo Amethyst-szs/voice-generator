@@ -34,6 +34,9 @@ let OutputWavArray = new Array;
 
 let CurrentString = 0;
 
+//Regex Settings
+let PunctuationRegex = new RegExp('[.!?]');
+
 /*
 ////////////
 MAIN PROCESS
@@ -115,8 +118,12 @@ async function AssetLoading()
 
 function SpeechWriting()
 {
-    FileSelection = `${Math.floor(Math.random() * Math.floor(AllSoundFiles.length))}`;
-    // TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage)
+    var FileSelection = `${Math.floor(Math.random() * Math.floor(AllSoundFiles.length))}`;
+
+    //These are the settings for regex formatting
+    var TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage)
+    console.log(NumOfSpaces);
+    
     if(speechgen.PreviousBlipCheck(PreviousBlips, FileSelection) == true){
         setTimeout(SpeechWriting, 20);
         return;
@@ -126,17 +133,16 @@ function SpeechWriting()
     PreviousBlips.splice(0, 1);
     PreviousBlips.push(FileSelection);
 
-    // console.log(TextSnip);
-    // console.log(AllSoundSamples[FileSelection], FileSelection);
+    console.log(TextSnip);
 
     //Run through all samples in FileSelection and add to OutputWavArray
     for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){
-        // if(TextSnip.includes(`.`)){
-        //     OutputWavArray.push(0);
-        // } else {
+        if(PunctuationRegex.test(TextSnip)){
+            OutputWavArray.push(0);
+        } else {
             // console.log(OutputWavArray, Samp);
             OutputWavArray.push(AllSoundSamples[FileSelection][Samp]);
-        // }
+        }
     }
     //At this point it's complete and the Current Character can be increased
     CurrentChar++;
@@ -144,7 +150,6 @@ function SpeechWriting()
     if(CurrentChar >= StringsList[CurrentString].length/CPBUsage)
     {
         //This condition is triggered if wave generation is complete
-        console.log(OutputWavArray);
         speechgen.OutputWav(OutputWavArray, 10000, EmotionList[CurrentString], StringsList[CurrentString].slice(0, 6));
         screenformat.DrawComplete();
         CurrentString++;
@@ -165,6 +170,7 @@ function SpeechWriting()
         screenformat.ResetScreen();
         screenformat.DrawVariable(`Current String: `, StringsList[CurrentString]);
         screenformat.DrawVariable(`Recently Selected Blips: `, PreviousBlips);
+        screenformat.DrawVariable(`Current CPB: `, CPBUsage);
         screenformat.DrawDivider(20);
         screenformat.DrawProgressBar(CurrentChar, StringsList[CurrentString].length/CPBUsage, 45, `Progress generating output wav:`);
         if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Collection Progress`);}
