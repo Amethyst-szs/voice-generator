@@ -22,6 +22,7 @@ let bBatch;
 let BPCType;
 let BPCUsage;
 let EmotionList = [];
+let CharacterList = [];
 let StringsList = [];
 
 let AllSoundFiles = [];
@@ -52,8 +53,10 @@ async function SetupProcess()
     bBatch = await homemenu.SingleOrBatch();
     //Gets the text string or batch file contents
     TextSource = await homemenu.CollectSourceText(bBatch);
+    //If using a single string, allows the user to input a character
+    SingleCharacter = await homemenu.SingleCharacter(bBatch);
     //If using a single string, allows the user to input an emotion
-    SingleEmotion = await homemenu.SingleEmotion(bBatch);
+    SingleEmotion = await homemenu.SingleEmotion(bBatch, SingleCharacter);
     //Lets the user pick the BPC
     BPCType = await homemenu.DefineBPC();
     /*
@@ -68,20 +71,21 @@ async function SetupProcess()
         case false:
             EmotionList = [SingleEmotion];
             StringsList = [TextSource];
+            CharacterList = [SingleCharacter];
             break;
         case true:
             EmotionList = analyser.CreateList(TextSource, true);
             StringsList = analyser.CreateList(TextSource, false);
+            CharacterList = analyser.CreateCharacterList(TextSource);
             break;
     }
-    console.log(SingleEmotion, bBatch, EmotionList[CurrentString], EmotionList, CurrentString);
-    AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString]);
+    AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString], CharacterList[CurrentString]);
     setTimeout(AssetLoading, 100);
 }
 
 async function AssetLoading()
 {
-    FileSelection = `assets/Amethyst/${EmotionList[CurrentString]}/${AllSoundFiles[CurrentSoundFile]}`;
+    FileSelection = `assets/${CharacterList[CurrentString]}/${EmotionList[CurrentString]}/${AllSoundFiles[CurrentSoundFile]}`;
     fs.stat(FileSelection, async function(err, stats) {
         fs.open(FileSelection, 'r', async function(errOpen, fd) {
             fs.read(fd, Buffer.alloc(stats.size), 0, stats.size, 0, async function(errRead, bytesRead, buffer) {
@@ -137,7 +141,7 @@ function SpeechWriting()
             //Reset variables
             CurrentSoundFile = 0;
             AllSoundSamples = [];
-            AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString]);
+            AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString], CharacterList[CurrentString]);
             CurrentChar = 0;
             OutputWavArray = [];
             AssetLoading();
@@ -155,4 +159,5 @@ function SpeechWriting()
         SpeechWriting();
     }
 }
+
 SetupProcess();

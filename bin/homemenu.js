@@ -33,12 +33,29 @@ module.exports = {
         }
     },
 
-    SingleEmotion: async function(bBatch)
+    SingleEmotion: async function(bBatch, SingleCharacter)
     {
         switch(bBatch) {
             case false:
-                AllFolders = fs.readdirSync(`assets/Amethyst/`);
-                return await input.select(`Select the voice line's emotion?`, AllFolders);
+                var AllFolders = fs.readdirSync(`assets/${SingleCharacter}/`);
+                if(AllFolders.length < 2){
+                    AllFolders.push(`Expected a second option so this is a placeholder!`);
+                }
+                return await input.select(`Select the voice line's emotion`, AllFolders);
+            case true:
+                return `Empty`;
+        }
+    },
+
+    SingleCharacter: async function(bBatch)
+    {
+        switch(bBatch) {
+            case false:
+                AllFolders = fs.readdirSync(`assets/`);
+                if(AllFolders.length < 2){
+                    AllFolders.push(`Expected a second option so this is a placeholder!`);
+                }
+                return await input.select(`Select the voice line's character`, AllFolders);
             case true:
                 return `Empty`;
         }
