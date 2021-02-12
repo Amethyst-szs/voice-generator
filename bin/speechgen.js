@@ -2,14 +2,14 @@ const wavefile = require('wavefile');
 const fs = require('fs');
 
 module.exports = {
-    BPCPrepare: function(BPCType, TextLength){
-        if(BPCType == `Automatic`)
+    CPBPrepare: function(CPBType, TextLength){
+        if(CPBType == `Automatic`)
         {
             return parseInt(Math.ceil(1+(TextLength/30)));
         }
         else
         {
-            return parseInt(BPCType, 10);
+            return parseInt(CPBType, 10);
         }
     },
 

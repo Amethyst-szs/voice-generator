@@ -19,8 +19,8 @@ const speechgen = require('./speechgen');
 let StartTime = new Date();
 
 let bBatch;
-let BPCType;
-let BPCUsage;
+let CPBType;
+let CPBUsage;
 let EmotionList = [];
 let CharacterList = [];
 let StringsList = [];
@@ -57,8 +57,8 @@ async function SetupProcess()
     SingleCharacter = await homemenu.SingleCharacter(bBatch);
     //If using a single string, allows the user to input an emotion
     SingleEmotion = await homemenu.SingleEmotion(bBatch, SingleCharacter);
-    //Lets the user pick the BPC
-    BPCType = await homemenu.DefineBPC();
+    //Lets the user pick the CPB
+    CPBType = await homemenu.DefineCPB();
     /*
     ////////////
     ANALYSE TEXT
@@ -103,7 +103,7 @@ async function AssetLoading()
                 } else {
                     //If all waves are loaded, this condition is called
                     screenformat.ResetScreen();
-                    BPCUsage = speechgen.BPCPrepare(BPCType, StringsList[CurrentString].length);
+                    CPBUsage = speechgen.CPBPrepare(CPBType, StringsList[CurrentString].length);
                     SpeechWriting();
                 }
             });
@@ -130,7 +130,7 @@ function SpeechWriting()
     //At this point it's complete and the Current Character can be increased
     CurrentChar++;
     
-    if(CurrentChar >= StringsList[CurrentString].length/BPCUsage)
+    if(CurrentChar >= StringsList[CurrentString].length/CPBUsage)
     {
         //This condition is triggered if wave generation is complete
         speechgen.OutputWav(OutputWavArray, 10000, StartTime);
@@ -154,7 +154,7 @@ function SpeechWriting()
         screenformat.DrawVariable(`Current String: `, StringsList[CurrentString]);
         screenformat.DrawVariable(`Recently Selected Blips: `, PreviousBlips);
         screenformat.DrawDivider(20);
-        screenformat.DrawProgressBar(CurrentChar, StringsList[CurrentString].length/BPCUsage, 45, `Progress generating output wav:`);
+        screenformat.DrawProgressBar(CurrentChar, StringsList[CurrentString].length/CPBUsage, 45, `Progress generating output wav:`);
         if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Collection Progress`);}
         SpeechWriting();
     }

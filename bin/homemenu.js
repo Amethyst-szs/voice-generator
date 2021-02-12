@@ -61,7 +61,7 @@ module.exports = {
         }
     },
 
-    DefineBPC: async function() {
-        return await input.select(`What is your BPC? (Blips per character)`, [`Automatic`, `1`, `2`, `3`, `4`, `5`]);
+    DefineCPB: async function() {
+        return await input.select(`What is your CPB? (Charaters Per Blip)`, [`Automatic`, `1`, `2`, `3`, `4`, `5`]);
     }
 }
