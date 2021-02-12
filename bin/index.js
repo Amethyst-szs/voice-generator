@@ -76,11 +76,12 @@ async function SetupProcess()
             CharacterList = [SingleCharacter];
             break;
         case true:
-            EmotionList = analyser.CreateList(TextSource, true);
-            StringsList = analyser.CreateList(TextSource, false);
+            EmotionList = analyser.CreateEmotionList(TextSource);
+            StringsList = analyser.CreateStringsList(TextSource);
             CharacterList = analyser.CreateCharacterList(TextSource);
             break;
     }
+    StringsList = analyser.TextFiltering(StringsList);
     AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString], CharacterList[CurrentString]);
     setTimeout(AssetLoading, 100);
 }

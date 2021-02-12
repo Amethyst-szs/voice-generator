@@ -1,24 +1,22 @@
 module.exports = {
-    CreateList: function(AllText, IsEmotionList) {
+    CreateEmotionList: function(AllText) {
         FinalListArray = [];
-        switch(IsEmotionList){
-            case true:
-                for(i=0;i<AllText.length;i++)
-                {
-                    if(AllText[i].startsWith(`-`) && !AllText[i].startsWith(`~~`)) {
-                        FinalListArray.push(AllText[i].slice(1, AllText[i].length-1));
-                    }
-                }
-                return FinalListArray;
-            case false:
-                for(i=0;i<AllText.length;i++)
-                {
-                    if(!AllText[i].startsWith(`-`) && !AllText[i].startsWith(`~~`)) {
-                        FinalListArray.push(AllText[i].slice(0, AllText[i].length-1));
-                    }
-                }
-                return FinalListArray;
+        for(i=0;i<AllText.length;i++){
+            if(AllText[i].startsWith(`-`) && !AllText[i].startsWith(`~~`)) {
+                FinalListArray.push(AllText[i].slice(1, AllText[i].length-1));
+            }
         }
+        return FinalListArray;
+    },
+
+    CreateStringsList: function(AllText) {
+        FinalListArray = [];
+        for(i=0;i<AllText.length;i++){
+            if(!AllText[i].startsWith(`-`) && !AllText[i].startsWith(`~~`)) {
+                FinalListArray.push(AllText[i].slice(0, AllText[i].length-1));
+            }
+        }
+        return FinalListArray;
     },
 
     CreateCharacterList: function(AllText) {
@@ -34,5 +32,12 @@ module.exports = {
             }
         }
         return FinalListArray;
+    },
+
+    TextFiltering: function(AllTextArray){
+        for(i=0;i<AllTextArray.length;i++){
+            
+        }
+        return AllTextArray;
     }
 }
