@@ -132,8 +132,6 @@ function SpeechWriting()
     PreviousBlips.splice(0, 1);
     PreviousBlips.push(FileSelection);
 
-    console.log(TextSnip);
-
     //Run through all samples in FileSelection and add to OutputWavArray
     for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){
         if(PunctuationRegex.test(TextSnip)){
