@@ -22,7 +22,7 @@ module.exports = {
         return false;
     },
 
-    OutputWav: function(OutputWavArray, ExtraSilenceLength, StartTime) {
+    OutputWav: function(OutputWavArray, ExtraSilenceLength, Emotion, Text) {
         for(i=0;i<ExtraSilenceLength;i++){
             OutputWavArray.push(0);
         }
@@ -33,7 +33,7 @@ module.exports = {
         if(fs.existsSync(`output`) == false){
             fs.mkdirSync(`output/`);
         }
-        fs.writeFileSync(`output/${StartTime.getTime()}-${new Date().getTime()}.wav`, OutputWave.toBuffer());
+        fs.writeFileSync(`output/${new Date().getTime()}-${Emotion}-${Text}.wav`, OutputWave.toBuffer());
         return; 
     }
 }
