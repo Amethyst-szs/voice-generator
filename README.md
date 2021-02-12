@@ -59,7 +59,7 @@ This folder is where audio files go that the program will use to generate your o
     - Emotions
       - Wave Files
 
-The character folders lets you pick who is talking in this example. The emotions section is where all your "variants" of that character live. The wave files inside there must all follow the format of `Emotion Name (same as the folder)1.wav`, `Emotion Name (same as the folder)2.wav`, ect. Amethyst and 2ndCharacter is included when downloading the repo and that folder structure is shown below.
+The character folders lets you pick who is talking in this example. The emotions section is where all your "variants" of that character live. The wave files inside there must all follow the format of `Emotion Name (same as the folder)1.wav`, `Emotion Name (same as the folder)2.wav`, ect. Amethyst and Character2 are included when downloading the repo and that folder structure is shown below.
 
 - assets
   - Amethyst
