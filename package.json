@@ -4,7 +4,7 @@
   "description": "Generates wav files for speaking text in blips",
   "main": "bin/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ."
   },
   "repository": {
     "type": "git",
