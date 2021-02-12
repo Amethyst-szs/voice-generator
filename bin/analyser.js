@@ -35,12 +35,8 @@ module.exports = {
     },
 
     TextFiltering: function(AllTextArray){
-        //Apply text filters and search for regex
-        var RepetitionRegex = new RegExp(`<*>`)
-        //Loop through every string in AllTextArray
         for(i=0;i<AllTextArray.length;i++){
-            //Check for the filters
-            var RepetitionMatch = RepetitionRegex.exec(AllTextArray[i]);
+            
         }
         return AllTextArray;
     }
