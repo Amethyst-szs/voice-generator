@@ -37,17 +37,11 @@ module.exports = {
     TextFiltering: function(AllTextArray){
         //Apply text filters and search for regex
         var RepetitionRegex = new RegExp(`<*>`)
-
+        //Loop through every string in AllTextArray
         for(i=0;i<AllTextArray.length;i++){
+            //Check for the filters
             var RepetitionMatch = RepetitionRegex.exec(AllTextArray[i]);
-            if(RepetitionMatch != null){
-                
-                console.log(AllTextArray[i][RepetitionMatch.index-1]);
-            }
-            console.log(RepetitionMatch.index);
-            console.log(`Breakpoint`);
         }
-
         return AllTextArray;
     }
 }
