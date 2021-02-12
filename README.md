@@ -33,19 +33,26 @@ Generating a collection is very useful because you could make any amount of wave
 
 #Video script 2-11-2021
 #Make sure to start on a sunny day!
+
 ~~Amethyst
+
 -Proud
 I'm so happy it's finally done!
 -Proud
 It took so much work
+
 #Explosion sound effect
+
 -Nervous
 What was that?!
+
 #Running sounds
+
 -Angry
 Oh it's just you!
 -Angry
 Explosion jim!!
+
 ~~ExplosionJim
 -Panic
 Oh no you found me! How?!?!?!
