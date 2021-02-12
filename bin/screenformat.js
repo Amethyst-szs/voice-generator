@@ -38,5 +38,5 @@ module.exports = {
     },
     DrawAnalysisMessage: function() {
         console.log(chalk.hex(`#007db3`).bold(`Initial setup is currently in progress.\nPlease wait!`))
-    },
+    }
 }
