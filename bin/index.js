@@ -122,7 +122,6 @@ function SpeechWriting()
 
     //These are the settings for regex formatting
     var TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage)
-    console.log(NumOfSpaces);
     
     if(speechgen.PreviousBlipCheck(PreviousBlips, FileSelection) == true){
         setTimeout(SpeechWriting, 20);
