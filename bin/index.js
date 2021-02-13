@@ -37,6 +37,11 @@ let CurrentString = 0;
 //Regex Settings
 let PunctuationRegex = new RegExp('[.!?]');
 
+//Customizable Settings (SHOULD BE MOVED TO A CONFIG.JSON EVENTUALLY!)
+let CurrentMutator;
+let MutatorMin = 0.95;
+let MutatorMax = 1.05;
+
 /*
 ////////////
 MAIN PROCESS
@@ -120,7 +125,7 @@ async function AssetLoading()
 function SpeechWriting()
 {
     var FileSelection = `${Math.floor(Math.random() * Math.floor(AllSoundFiles.length))}`;
-
+    
     //These are the settings for regex formatting
     var TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage)
     
