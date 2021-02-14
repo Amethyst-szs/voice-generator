@@ -39,7 +39,7 @@ module.exports = {
             case false:
                 var AllFolders = fs.readdirSync(`assets/${SingleCharacter}/`);
                 if(AllFolders.length < 2){
-                    AllFolders.push(`Expected a second option so this is a placeholder!`);
+                    return AllFolders[0];
                 }
                 return await input.select(`Select the voice line's emotion`, AllFolders);
             case true:
@@ -53,7 +53,7 @@ module.exports = {
             case false:
                 AllFolders = fs.readdirSync(`assets/`);
                 if(AllFolders.length < 2){
-                    AllFolders.push(`Expected a second option so this is a placeholder!`);
+                    return AllFolders[0];
                 }
                 return await input.select(`Select the voice line's character`, AllFolders);
             case true:

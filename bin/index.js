@@ -120,7 +120,7 @@ async function AssetLoading()
 function SpeechWriting()
 {
     var FileSelection = `${Math.floor(Math.random() * Math.floor(AllSoundFiles.length))}`;
-
+    
     //These are the settings for regex formatting
     var TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage)
     
