@@ -26,7 +26,7 @@ So what will this program actually make? After running it will output a wave fil
 Each output wave file is made up of blips from the `assets/` folder. More detail about assets can be found further down.
 
 ## Generating Collections
-Generating a collection is very useful because you could make any amount of wave files in one batch. Collections are made from .txt files. They are quite simple to make. Starting a line with a ***#*** is a comment and will be completely ignored. Starting a line with a ***-*** is how you define an emotion. You need one of these before every spoken line. Starting a line with ***\~\~*** will allow you to switch characters. It is worth noting that you don't need to set this before every line, just set it every time you want to switch to a new character speaking. Starting a line with no symbol means it is a spoken line.
+Generating a collection is very useful because you could make any amount of wave files in one batch. Collections are made from .txt files. They are quite simple to make. Starting a line with a ***#*** is a comment and will be completely ignored. Starting a line with a ***-*** is how you define an emotion. You need one of these before every spoken line `Note for advanced users: Don't include ".swave" after your emotion name.` Starting a line with ***\~\~*** will allow you to switch characters. It is worth noting that you don't need to set this before every line, just set it every time you want to switch to a new character speaking. Starting a line with no symbol means it is a spoken line.
 
 ```
 #Example:
@@ -63,23 +63,29 @@ This folder is where audio files go that the program will use to generate your o
 
 - assets
   - Characters
-    - Emotions
-      - Wave Files
+    - Emotion .swave Files
 
-The character folders lets you pick who is talking in this example. The emotions section is where all your "variants" of that character live. The wave files inside there must all follow the format of `Emotion Name (same as the folder)1.wav`, `Emotion Name (same as the folder)2.wav`, ect. Amethyst is included when downloading the repo and that folder structure is shown below.
+The character folders lets you pick who is talking. The emotion section is where all your "variants" of that character live. Amethyst is included when downloading the repo and that folder structure is shown below. Each emotion is contained in a .swave file, a custom file type used for this program. These files are used to allow loading dozens of wave files without needing to go to disk over and over and over to get all the needed files. One .swave file contains every source .wav file. An example of the folder structure is shown below.
 
 - assets
   - Amethyst
-    - Amused
-      - Amused1.wav
-      - Amused2.wav
-      - Amused3.wav
-      - Ect...
-    - Angry
-      - Angry1.wav
-      - Angry2.wav
-      - Angry3.wav
-      - Ect...
+    - Asumed.swave
+    - Angry.swave
+    - Depressed.swave
+    - Ecstatic.swave
+    - Nervous.swave
     - Ect...
+    
+## Added new sounds and characters (ADVANCED)
 
-This is fully expandable! If you make your own blip sounds, add them to the assets folder and assuming you format it correctly, the program will recognize them and work with your wave files!
+Wanna create a new character to add to this list? Great! This guide should teach you how to do it.
+
+#### Making your source .wav files
+
+How do you make the blip sounds? I used a program called Bfxr to generate the sounds. I don't have a ton of advice to give here, just download the program and play around with it. Try to keep each sound blip short and you need to make at least 5 variants of that emotion. This can be done very easily in Bfxr with the mutation feature it has.
+
+#### Combining your .wav files into a .swave
+
+In order to use your new blip sounds in the program, you need to convert them into a .swave file. In order to do this, open the command line and move your directory into the root of the program (same place as the `run.bat` file). Then run the command `npm start swave` or `node bin/swave.js`. This will give you three options. The first option wants you to drag and drop the folder containing all of your source .wav files. (NOTE: Don't drag and drop all the .wav files, drag and drop the folder). After that you will input what the emotion should be called (Case sensitive). Lastly, input what character this emotion is for!
+
+Once you are done with all that, the new emotion will be there the next time you open the program!
