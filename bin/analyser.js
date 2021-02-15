@@ -39,5 +39,16 @@ module.exports = {
             
         }
         return AllTextArray;
+    },
+
+    FilterDownToFileType: function(AllFiles, FileType = `.wav`){
+        for(i=0;i<AllFiles.length;i++){
+            if(!AllFiles[i].includes(FileType)) {
+                AllFiles.splice(i, 1);
+                i--;
+                continue;
+            }
+        }
+        return AllFiles;
     }
 }
