@@ -128,7 +128,7 @@ function SpeechWriting()
     //These are the settings for regex formatting
     var TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage);
     
-    if(speechgen.PreviousBlipCheck(PreviousBlips, FileSelection) == true){
+    if(speechgen.PreviousBlipCheck(PreviousBlips, FileSelection) == true && AllSoundSamples.length >= 5){
         setTimeout(SpeechWriting, 20);
         return;
     }
