@@ -1,6 +1,10 @@
 # voice-generator
 Generates wave files for speaking text using audio blips
 
+## Requirements
+Node
+npm
+
 ## How to use
 Download the master branch of the repo and extract the contents. Open the `run.bat` or run `node .` in the command line. (Note: Running the run.bat script will also install npm dependencies automatically)
 The command line will give you options which will be detailed below:
