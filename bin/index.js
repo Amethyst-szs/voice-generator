@@ -68,7 +68,7 @@ async function SetupProcess()
 
     switch(bBatch){
         case false:
-            EmotionList = [SingleEmotion];
+            EmotionList = [SingleEmotion+`.swave`];
             StringsList = [TextSource];
             CharacterList = [SingleCharacter];
             break;

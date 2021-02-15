@@ -41,6 +41,11 @@ module.exports = {
                 if(AllFolders.length < 2){
                     return AllFolders[0];
                 }
+
+                for(i=0;i<AllFolders.length;i++){
+                    AllFolders[i] = AllFolders[i].slice(0, AllFolders[i].length-6);
+                }
+
                 return await input.select(`Select the voice line's emotion`, AllFolders);
             case true:
                 return `Empty`;
