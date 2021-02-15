@@ -2,8 +2,8 @@
 Generates wave files for speaking text using audio blips
 
 ## Requirements
-Node
-npm
+##### Node
+##### npm
 
 ## How to use
 Download the master branch of the repo and extract the contents. Open the `run.bat` or run `node .` in the command line. (Note: Running the run.bat script will also install npm dependencies automatically)
