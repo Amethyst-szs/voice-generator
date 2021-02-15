@@ -3,7 +3,7 @@ module.exports = {
         FinalListArray = [];
         for(i=0;i<AllText.length;i++){
             if(AllText[i].startsWith(`-`) && !AllText[i].startsWith(`~~`)) {
-                FinalListArray.push(AllText[i].slice(1, AllText[i].length-1));
+                FinalListArray.push(AllText[i].slice(1, AllText[i].length-1)+`.swave`);
             }
         }
         return FinalListArray;

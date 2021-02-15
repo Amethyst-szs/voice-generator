@@ -13,7 +13,6 @@ const wavefile = require('wavefile');
 const homemenu = require('./homemenu');
 const analyser = require('./analyser');
 const screenformat = require('./screenformat');
-const assetloader = require('./assetloader');
 const speechgen = require('./speechgen');
 
 //Important global variable declaration
@@ -24,9 +23,7 @@ let EmotionList = [];
 let CharacterList = [];
 let StringsList = [];
 
-let AllSoundFiles = [];
 let AllSoundSamples = [];
-let CurrentSoundFile = 0;
 
 let CurrentChar = 0;
 let PreviousBlips = [-1, -1, -1, -1];
@@ -82,36 +79,43 @@ async function SetupProcess()
             break;
     }
     StringsList = analyser.TextFiltering(StringsList);
-    AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString], CharacterList[CurrentString]);
     setTimeout(AssetLoading, 100);
 }
 
-async function AssetLoading()
+function AssetLoading()
 {
-    FileSelection = `assets/${CharacterList[CurrentString]}/${EmotionList[CurrentString]}/${AllSoundFiles[CurrentSoundFile]}`;
-    fs.stat(FileSelection, async function(err, stats) {
-        fs.open(FileSelection, 'r', async function(errOpen, fd) {
-            fs.read(fd, Buffer.alloc(stats.size), 0, stats.size, 0, async function(errRead, bytesRead, buffer) {
-                wav = new wavefile.WaveFile();
-                await wav.fromBuffer(buffer);
-                Samps = await wav.getSamples()
-                AllSoundSamples.push(Samps);
-                CurrentSoundFile++;
-                if(CurrentSoundFile<AllSoundFiles.length){
-                    //If there are more waves to load, this condition is called
-                    screenformat.ResetScreen();
-                    screenformat.DrawVariable(`Emotion`, EmotionList[CurrentString]);
-                    screenformat.DrawVariable(`Current Wave File`, FileSelection);
-                    screenformat.DrawDivider(20);
-                    screenformat.DrawProgressBar(CurrentSoundFile, AllSoundFiles.length, 45, `Loading wavs for current emotion...`)
-                    if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Collection Progress`);}
-                    setTimeout(AssetLoading, 10);
-                } else {
-                    //If all waves are loaded, this condition is called
-                    screenformat.ResetScreen();
-                    CPBUsage = speechgen.CPBPrepare(CPBType, StringsList[CurrentString].length);
-                    SpeechWriting();
+    FileSelection = `assets/${CharacterList[CurrentString]}/${EmotionList[CurrentString]}`;
+    fs.stat(FileSelection, function(err, stats) {
+        fs.open(FileSelection, 'r', function(errOpen, fd) {
+            fs.read(fd, Buffer.alloc(stats.size), 0, stats.size, 0, function(errRead, bytesRead, buffer) {
+                CurrentFile = 0;
+                WaveFiles = [``];
+                BufferComparison = new Buffer.from([0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD]);
+
+                for(i=0;i<buffer.byteLength;i++){
+                    NextPush = buffer[i].toString(16);
+                    if(NextPush.length == 2){
+                        WaveFiles[CurrentFile] += buffer[i].toString(16);
+                    } else {
+                        WaveFiles[CurrentFile] += `0`+buffer[i].toString(16);
+                    }
+                    if(buffer.slice(i, i+10).includes(BufferComparison)){
+                        WaveFiles[CurrentFile] = WaveFiles[CurrentFile].slice(0, WaveFiles[CurrentFile].length-20);
+                        i += 9;
+                        CurrentFile++;
+                        WaveFiles.push(``);
+                    }
                 }
+                WaveFiles.pop();
+                for(i=0;i<WaveFiles.length;i++){
+                    wav = new wavefile.WaveFile();
+                    wav.fromBuffer(new Buffer.from(WaveFiles[i], 'hex'));
+                    AllSoundSamples.push(wav.getSamples());
+                }
+
+                screenformat.ResetScreen();
+                CPBUsage = speechgen.CPBPrepare(CPBType, StringsList[CurrentString].length);
+                SpeechWriting();
             });
         });
     });
@@ -119,10 +123,10 @@ async function AssetLoading()
 
 function SpeechWriting()
 {
-    var FileSelection = `${Math.floor(Math.random() * Math.floor(AllSoundFiles.length))}`;
+    var FileSelection = `${Math.floor(Math.random() * Math.floor(AllSoundSamples.length))}`;
     
     //These are the settings for regex formatting
-    var TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage)
+    var TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage);
     
     if(speechgen.PreviousBlipCheck(PreviousBlips, FileSelection) == true){
         setTimeout(SpeechWriting, 20);
@@ -156,7 +160,6 @@ function SpeechWriting()
             //Reset variables
             CurrentSoundFile = 0;
             AllSoundSamples = [];
-            AllSoundFiles = assetloader.FindAllSoundFiles(EmotionList[CurrentString], CharacterList[CurrentString]);
             CurrentChar = 0;
             OutputWavArray = [];
             AssetLoading();
