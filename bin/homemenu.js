@@ -63,5 +63,17 @@ module.exports = {
 
     DefineCPB: async function() {
         return await input.select(`What is your CPB? (Charaters Per Blip)`, [`Automatic`, `1`, `2`, `3`, `4`, `5`]);
+    },
+
+    SwaveFolder: async function() {
+        return await input.text(`Please supply the folder path to your wave files you would like to convert`);
+    },
+
+    SwaveEmotionName: async function() {
+        return await input.text(`What should this emotion be called?`);
+    },
+
+    SwaveCharacterName: async function() {
+        return await input.text(`What character is this emotion for?`);
     }
 }

@@ -4,7 +4,8 @@
   "description": "Generates wav files for speaking text in blips",
   "main": "bin/index.js",
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+    "swave": "node bin/swave.js"
   },
   "repository": {
     "type": "git",
