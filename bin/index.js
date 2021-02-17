@@ -152,7 +152,7 @@ function SpeechWriting()
     if(CurrentChar >= StringsList[CurrentString].length/CPBUsage)
     {
         //This condition is triggered if wave generation is complete
-        speechgen.OutputWav(OutputWavArray, 10000, EmotionList[CurrentString], StringsList[CurrentString].slice(0, 6));
+        speechgen.OutputWav(OutputWavArray, 10000, EmotionList[CurrentString], CurrentString);
         screenformat.DrawComplete();
         CurrentString++;
         if(CurrentString+1 <= StringsList.length){

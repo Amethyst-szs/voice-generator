@@ -22,18 +22,17 @@ module.exports = {
         return false;
     },
 
-    OutputWav: function(OutputWavArray, ExtraSilenceLength, Emotion, Text) {
+    OutputWav: function(OutputWavArray, ExtraSilenceLength, Emotion, CurrentString) {
         for(i=0;i<ExtraSilenceLength;i++){
             OutputWavArray.push(0);
         }
-    
         //Creates File Wav File From OutputWavArray And Writes To Disk
         OutputWave = new wavefile.WaveFile;
         OutputWave.fromScratch(1, 44100, '16', OutputWavArray);
         if(fs.existsSync(`output`) == false){
             fs.mkdirSync(`output/`);
         }
-        fs.writeFileSync(`output/${new Date().getTime()}-${Emotion}-${Text}.wav`, OutputWave.toBuffer());
+        fs.writeFileSync(`output/${CurrentString+1}-${new Date().getTime()}-${Emotion}.wav`, OutputWave.toBuffer());
         return; 
     }
 }
