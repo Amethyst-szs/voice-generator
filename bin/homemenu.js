@@ -12,7 +12,7 @@ module.exports = {
         }
     },
 
-    CollectSourceText: async function(bBatch) {
+    CollectSourceText: async function(bBatch, config) {
         if(bBatch==undefined) { return `Error!`; }
         switch(bBatch){
             case false:
@@ -20,7 +20,7 @@ module.exports = {
             case true:
                 InputPath = await input.text(`Provide the file path towards your collection file:`);
                 AllText = fs.readFileSync(InputPath, `utf-8`);
-                AllTextArray = AllText.split(`\n`);
+                AllTextArray = AllText.split(config.CollectionSplit);
                 for(i=0;i<AllTextArray.length;i++)
                 {
                     if(AllTextArray[i].startsWith(`#`) || AllTextArray[i].length <= 2)

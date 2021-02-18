@@ -49,7 +49,7 @@ async function SetupProcess()
     //Returns a bool for if this is a single string or batch
     bBatch = await homemenu.SingleOrBatch();
     //Gets the text string or batch file contents
-    TextSource = await homemenu.CollectSourceText(bBatch);
+    TextSource = await homemenu.CollectSourceText(bBatch, config);
     //If using a single string, allows the user to input a character
     SingleCharacter = await homemenu.SingleCharacter(bBatch);
     //If using a single string, allows the user to input an emotion

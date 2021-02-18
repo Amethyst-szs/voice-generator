@@ -1,6 +1,8 @@
 {
     "Punctuation": ".?!",
 
+    "CollectionSplit": "\n",
+
     "SwaveSymbol": "0xFD",
     "SwaveSepLength": 10
 }
