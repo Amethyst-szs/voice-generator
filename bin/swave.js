@@ -35,7 +35,6 @@ async function SetupProcess(){
 
     for(i=0;i<config.SwaveSepLength;i++){
         FullBufferSeperator += config.SwaveSymbol.slice(2,4);
-        console.log(FullBufferSeperator);
     }
     AssetLoading(0);
 }

@@ -122,20 +122,15 @@ function SpeechWriting()
     PreviousBlips.splice(0, 1);
     PreviousBlips.push(FileSelection);
 
+    //Add the next audio samples to the list
     //Checks if this part of the text has punctuation
-    switch(new RegExp(`[${config.Punctuation}]`).test(TextSnip)){
-        //This case adds silence to the audio output for punctuation
-        case true:
-            for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){
-                OutputWavArray.push(0);
-            }
-            break;
-        //This case adds the samples of the selection
-        case false:
-            for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){
-                OutputWavArray.push(AllSoundSamples[FileSelection][Samp]);
-            }
-            break;
+    isPunctuation = new RegExp(`[${config.Punctuation}]`).test(TextSnip);
+
+    if(!isPunctuation){
+        for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){ OutputWavArray.push(AllSoundSamples[FileSelection][Samp]); }
+    }
+    else if(isPunctuation){
+        for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){ OutputWavArray.push(0); }
     }
 
     //At this point it's complete and the Current Character can be increased
