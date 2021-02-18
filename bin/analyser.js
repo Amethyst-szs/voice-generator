@@ -34,13 +34,6 @@ module.exports = {
         return FinalListArray;
     },
 
-    TextFiltering: function(AllTextArray){
-        for(i=0;i<AllTextArray.length;i++){
-            
-        }
-        return AllTextArray;
-    },
-
     FilterDownToFileType: function(AllFiles, FileType = `.wav`){
         for(i=0;i<AllFiles.length;i++){
             if(!AllFiles[i].includes(FileType)) {

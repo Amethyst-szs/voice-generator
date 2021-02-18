@@ -7,13 +7,16 @@ PROGRAM SETUP
 */
 
 const fs = require('fs');
-const wavefile = require('wavefile');
 
 //External javascript code
 const homemenu = require('./homemenu');
 const analyser = require('./analyser');
 const screenformat = require('./screenformat');
 const speechgen = require('./speechgen');
+const assetloader = require('./assetloader');
+
+//Config
+const config = require('../config.json');
 
 //Important global variable declaration
 let bBatch;
@@ -22,17 +25,12 @@ let CPBUsage;
 let EmotionList = [];
 let CharacterList = [];
 let StringsList = [];
-
 let AllSoundSamples = [];
+let CollectionProgress = 0;
 
 let CurrentChar = 0;
 let PreviousBlips = [-1, -1, -1, -1];
 let OutputWavArray = new Array;
-
-let CurrentString = 0;
-
-//Regex Settings
-let PunctuationRegex = new RegExp('[.!?]');
 
 /*
 ////////////
@@ -63,9 +61,12 @@ async function SetupProcess()
     ANALYSE TEXT
     ////////////
     */
+
+    //Reset Screen
     screenformat.ResetScreen();
     screenformat.DrawAnalysisMessage();
 
+    //Create all lists based on if this is a batch
     switch(bBatch){
         case false:
             EmotionList = [SingleEmotion+`.swave`];
@@ -78,43 +79,27 @@ async function SetupProcess()
             CharacterList = analyser.CreateCharacterList(TextSource);
             break;
     }
-    StringsList = analyser.TextFiltering(StringsList);
-    setTimeout(AssetLoading, 100);
+
+    //Adds an output folder if it does not exist already to avoid crashes
+    if(fs.existsSync(`output`) == false){
+        fs.mkdirSync(`output/`);
+    }
+
+    //Starts the process by loading in assets
+    AssetLoading();
 }
 
 function AssetLoading()
 {
-    FileSelection = `assets/${CharacterList[CurrentString]}/${EmotionList[CurrentString]}`;
+    //Create a string that points to the current character's emotion
+    FileSelection = `assets/${CharacterList[CollectionProgress]}/${EmotionList[CollectionProgress]}`;
+
+    //Read this file and return a buffer
     fs.stat(FileSelection, function(err, stats) {
         fs.open(FileSelection, 'r', function(errOpen, fd) {
             fs.read(fd, Buffer.alloc(stats.size), 0, stats.size, 0, function(errRead, bytesRead, buffer) {
-                CurrentFile = 0;
-                WaveFiles = [``];
-                BufferComparison = new Buffer.from([0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD]);
-
-                for(i=0;i<buffer.byteLength;i++){
-                    NextPush = buffer[i].toString(16);
-                    if(NextPush.length == 2){
-                        WaveFiles[CurrentFile] += buffer[i].toString(16);
-                    } else {
-                        WaveFiles[CurrentFile] += `0`+buffer[i].toString(16);
-                    }
-                    if(buffer.slice(i, i+10).includes(BufferComparison)){
-                        WaveFiles[CurrentFile] = WaveFiles[CurrentFile].slice(0, WaveFiles[CurrentFile].length-20);
-                        i += 9;
-                        CurrentFile++;
-                        WaveFiles.push(``);
-                    }
-                }
-                WaveFiles.pop();
-                for(i=0;i<WaveFiles.length;i++){
-                    wav = new wavefile.WaveFile();
-                    wav.fromBuffer(new Buffer.from(WaveFiles[i], 'hex'));
-                    AllSoundSamples.push(wav.getSamples());
-                }
-
-                screenformat.ResetScreen();
-                CPBUsage = speechgen.CPBPrepare(CPBType, StringsList[CurrentString].length);
+                AllSoundSamples = assetloader.PrepareSoundSamples(buffer);
+                CPBUsage = assetloader.CPBPrepare(CPBType, StringsList[CollectionProgress].length);
                 SpeechWriting();
             });
         });
@@ -126,7 +111,7 @@ function SpeechWriting()
     var FileSelection = `${Math.floor(Math.random() * Math.floor(AllSoundSamples.length))}`;
     
     //These are the settings for regex formatting
-    var TextSnip = StringsList[CurrentString].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage);
+    var TextSnip = StringsList[CollectionProgress].slice(CurrentChar*CPBUsage, (CurrentChar+1)*CPBUsage);
     
     if(speechgen.PreviousBlipCheck(PreviousBlips, FileSelection) == true && AllSoundSamples.length >= 5){
         setTimeout(SpeechWriting, 20);
@@ -137,25 +122,32 @@ function SpeechWriting()
     PreviousBlips.splice(0, 1);
     PreviousBlips.push(FileSelection);
 
-    //Run through all samples in FileSelection and add to OutputWavArray
-    for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){
-        if(PunctuationRegex.test(TextSnip)){
-            OutputWavArray.push(0);
-        } else {
-            // console.log(OutputWavArray, Samp);
-            OutputWavArray.push(AllSoundSamples[FileSelection][Samp]);
-        }
+    //Checks if this part of the text has punctuation
+    switch(config.punctuation.test(TextSnip)){
+        //This case adds silence to the audio output for punctuation
+        case true:
+            for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){
+                OutputWavArray.push(0);
+            }
+            break;
+        //This case adds the samples of the selection
+        case false:
+            for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){
+                OutputWavArray.push(AllSoundSamples[FileSelection][Samp]);
+            }
+            break;
     }
+
     //At this point it's complete and the Current Character can be increased
     CurrentChar++;
     
-    if(CurrentChar >= StringsList[CurrentString].length/CPBUsage)
+    if(CurrentChar >= StringsList[CollectionProgress].length/CPBUsage)
     {
         //This condition is triggered if wave generation is complete
-        speechgen.OutputWav(OutputWavArray, 10000, EmotionList[CurrentString], CurrentString);
+        speechgen.OutputWav(OutputWavArray, 10000, EmotionList[CollectionProgress], CollectionProgress);
         screenformat.DrawComplete();
-        CurrentString++;
-        if(CurrentString+1 <= StringsList.length){
+        CollectionProgress++;
+        if(CollectionProgress+1 <= StringsList.length){
             //This condition is triggered if a batch has more strings to create
             //Reset variables
             CurrentSoundFile = 0;
@@ -169,13 +161,13 @@ function SpeechWriting()
     {
         //This condition is triggered if wave generation is incomplete
         screenformat.ResetScreen();
-        screenformat.DrawVariable(`Current String: `, StringsList[CurrentString]);
+        screenformat.DrawVariable(`Current String: `, StringsList[CollectionProgress]);
         screenformat.DrawVariable(`Recently Selected Blips: `, PreviousBlips);
         screenformat.DrawVariable(`Current CPB: `, CPBUsage);
         screenformat.DrawDivider(20);
-        screenformat.DrawProgressBar(CurrentChar, StringsList[CurrentString].length/CPBUsage, 45, `Progress generating output wav:`);
-        if (bBatch == true) {screenformat.DrawProgressBar(CurrentString, StringsList.length, 60, `Overall Collection Progress`);}
-        SpeechWriting();
+        screenformat.DrawProgressBar(CurrentChar, StringsList[CollectionProgress].length/CPBUsage, 45, `Progress generating output wav:`);
+        if (bBatch == true) {screenformat.DrawProgressBar(CollectionProgress, StringsList.length, 60, `Overall Collection Progress`);}
+        SpeechWriting(CurrentChar);
     }
 }
 
