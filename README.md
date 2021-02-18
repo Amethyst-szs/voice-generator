@@ -62,6 +62,19 @@ Explosion jim!!
 Oh no you found me! How?!?!?!
 ```
 
+## Config .json
+This file contains some things you can modify about the program easily. Every option will be detailed below
+```
+"Punctuation": ".?!"
+This parameter can be used to change which symbols are marked as punctuation
+
+"SwaveSymbol": "0xFD"
+This parameter marks what hexadecimal value is used to seperate waves in a swave. Not recommened to change!
+
+"SwaveSepLength": "10"
+Amount of the SwaveSymbol it needs to find in a row to seperate wave files in a swave. Not recommened to change!
+```
+
 ## The Assets Folder
 This folder is where audio files go that the program will use to generate your output. The structure of the folder is listed below.
 
