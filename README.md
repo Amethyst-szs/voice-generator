@@ -68,6 +68,9 @@ This file contains some things you can modify about the program easily. Every op
 "Punctuation": ".?!"
 This parameter can be used to change which symbols are marked as punctuation
 
+"CollectionSplit": "\n"
+This parameter is what splits a collection file. You can change this from line breaks if you want a special symbol to switch lines, but in general don't change this.
+
 "SwaveSymbol": "0xFD"
 This parameter marks what hexadecimal value is used to seperate waves in a swave. Not recommened to change!
 
