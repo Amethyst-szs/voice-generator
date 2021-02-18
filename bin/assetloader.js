@@ -1,11 +1,18 @@
 const wavefile = require('wavefile');
 
 module.exports = {
-    PrepareSoundSamples: function(buffer){
+    PrepareSoundSamples: function(buffer, WavSeperator, WavSeperatorLength){
+        //Define Important Variables
         CurrentFile = 0;
-        WaveFiles = [``];
         ReturnSamples = [];
-        BufferComparison = new Buffer.from([0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD]);
+        WaveFiles = [``];
+
+        //Identify what the wav seperator is
+        WavSeperatorUsage = [];
+        for(i=0;i<WavSeperatorLength;i++){
+            WavSeperatorUsage.push(WavSeperator);
+        }
+        BufferComparison = new Buffer.from(WavSeperatorUsage);
 
         for(i=0;i<buffer.byteLength;i++){
             NextPush = buffer[i].toString(16);

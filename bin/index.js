@@ -98,7 +98,7 @@ function AssetLoading()
     fs.stat(FileSelection, function(err, stats) {
         fs.open(FileSelection, 'r', function(errOpen, fd) {
             fs.read(fd, Buffer.alloc(stats.size), 0, stats.size, 0, function(errRead, bytesRead, buffer) {
-                AllSoundSamples = assetloader.PrepareSoundSamples(buffer);
+                AllSoundSamples = assetloader.PrepareSoundSamples(buffer, config.SwaveSymbol, config.SwaveSepLength);
                 CPBUsage = assetloader.CPBPrepare(CPBType, StringsList[CollectionProgress].length);
                 SpeechWriting();
             });
@@ -123,7 +123,7 @@ function SpeechWriting()
     PreviousBlips.push(FileSelection);
 
     //Checks if this part of the text has punctuation
-    switch(config.punctuation.test(TextSnip)){
+    switch(new RegExp(`[${config.Punctuation}]`).test(TextSnip)){
         //This case adds silence to the audio output for punctuation
         case true:
             for(Samp=0;Samp<AllSoundSamples[FileSelection].length;Samp++){

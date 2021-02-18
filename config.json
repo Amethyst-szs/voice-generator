@@ -1,3 +1,6 @@
 {
-    "punctuation": ".?!"
+    "Punctuation": ".?!",
+
+    "SwaveSymbol": "0xFD",
+    "SwaveSepLength": 10
 }
