@@ -78,7 +78,6 @@ async function SetupProcess()
             CharacterList = analyser.CreateCharacterList(TextSource);
             break;
     }
-    
     //Adds an output folder if it does not exist already to avoid crashes
     if(fs.existsSync(`output`) == false){
         fs.mkdirSync(`output/`);

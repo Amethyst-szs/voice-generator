@@ -39,7 +39,7 @@ module.exports = {
             case false:
                 var AllFolders = fs.readdirSync(`assets/${SingleCharacter}/`);
                 if(AllFolders.length < 2){
-                    return AllFolders[0];
+                    return AllFolders[0].slice(0, AllFolders[0].length-6);
                 }
 
                 for(i=0;i<AllFolders.length;i++){
