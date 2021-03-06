@@ -137,7 +137,6 @@ function SpeechWriting()
     {
         //This condition is triggered if wave generation is complete
         speechgen.OutputWav(OutputWavArray, 10000, EmotionList[CollectionProgress], CollectionProgress);
-        screenformat.DrawComplete();
         CollectionProgress++;
         if(CollectionProgress+1 <= StringsList.length){
             //This condition is triggered if a batch has more strings to create
@@ -147,6 +146,9 @@ function SpeechWriting()
             CurrentChar = 0;
             OutputWavArray = [];
             AssetLoading();
+        } else {
+            screenformat.DrawComplete();
+            setTimeout(Ending, 2500);
         }
     }
     else
@@ -161,6 +163,10 @@ function SpeechWriting()
         if (bBatch == true) {screenformat.DrawProgressBar(CollectionProgress, StringsList.length, 60, `Overall Collection Progress`);}
         SpeechWriting(CurrentChar);
     }
+}
+
+function Ending(){
+    console.log(`Ending...`);
 }
 
 SetupProcess();
