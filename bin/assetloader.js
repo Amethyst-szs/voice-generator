@@ -36,7 +36,7 @@ module.exports = {
             if(WaveSamples.length >= 2 && WaveSamples.length <= 10){
                 ReturnSamples.push(WaveSamples[0])
             } else {
-                ReturnSamples.push();
+                ReturnSamples.push(WaveSamples);
             }
         }
 
