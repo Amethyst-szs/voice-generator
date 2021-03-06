@@ -1,6 +1,6 @@
 @echo off
 if exist node_modules/ (
-node .
+node bin/swave.js
 ) else (
 npm install && node bin/swave.js
 )
