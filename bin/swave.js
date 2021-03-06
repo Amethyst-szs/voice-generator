@@ -33,11 +33,6 @@ async function SetupProcess(){
 
     FolderContents = await analyser.FilterDownToFileType(fs.readdirSync(FolderPath), `.wav`);
 
-    if(FolderContents.length < 2){
-        console.log(`You need more than one source .wav file!`);
-        return;
-    }
-
     for(i=0;i<config.SwaveSepLength;i++){
         FullBufferSeperator += config.SwaveSymbol.slice(2,4);
     }
