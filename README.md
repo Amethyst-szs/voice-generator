@@ -106,6 +106,6 @@ How do you make the blip sounds? I used a program called Bfxr to generate the so
 
 #### Combining your .wav files into a .swave
 
-In order to use your new blip sounds in the program, you need to convert them into a .swave file. In order to do this, open the command line and move your directory into the root of the program (same place as the `run.bat` file). Then run the command `npm start swave` or `node bin/swave.js`. This will give you three options. The first option wants you to drag and drop the folder containing all of your source .wav files. (NOTE: Don't drag and drop all the .wav files, drag and drop the folder). After that you will input what the emotion should be called (Case sensitive). Lastly, input what character this emotion is for!
+In order to use your new blip sounds in the program, you need to convert them into a .swave file. In order to do this, you can use the wav2swave.bat if on windows OR open the command line and move your directory into the root of the program (same place as the `run.bat` file). Then run the command `npm start swave` or `node bin/swave.js`. This will give you three options. The first option wants you to drag and drop the folder containing all of your source .wav files. (NOTE: Don't drag and drop all the .wav files, drag and drop the folder). After that you will input what the emotion should be called (Case sensitive). Lastly, input what character this emotion is for!
 
 Once you are done with all that, the new emotion will be there the next time you open the program!
