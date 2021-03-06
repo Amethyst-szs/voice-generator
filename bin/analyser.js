@@ -11,9 +11,16 @@ module.exports = {
 
     CreateStringsList: function(AllText) {
         FinalListArray = [];
+        //Isolate down to spoken strings
         for(i=0;i<AllText.length;i++){
             if(!AllText[i].startsWith(`-`) && !AllText[i].startsWith(`~~`)) {
                 FinalListArray.push(AllText[i].slice(0, AllText[i].length-1));
+            }
+        }
+        //Cut off these lines if it encounters a mid-line comment
+        for(i=0;i<FinalListArray.length;i++){
+            if(FinalListArray[i].includes(`#`)){
+                FinalListArray[i] = FinalListArray[i].slice(0, FinalListArray[i].indexOf(`#`));
             }
         }
         return FinalListArray;

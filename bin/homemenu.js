@@ -24,9 +24,9 @@ module.exports = {
                 for(i=0;i<AllTextArray.length;i++)
                 {
                     if(AllTextArray[i].startsWith(`#`) || AllTextArray[i].length <= 2)
-                    { 
+                    {
                         AllTextArray.splice(i, 1);
-                        i--
+                        i--;
                     }
                 }
                 return AllTextArray;
