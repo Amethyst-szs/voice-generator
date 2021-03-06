@@ -133,7 +133,6 @@ function SpeechWriting()
 
     //At this point it's complete and the Current Character can be increased
     CurrentChar++;
-    
     if(CurrentChar >= StringsList[CollectionProgress].length/CPBUsage)
     {
         //This condition is triggered if wave generation is complete

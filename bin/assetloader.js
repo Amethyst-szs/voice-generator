@@ -29,11 +29,15 @@ module.exports = {
             }
         }
         WaveFiles.pop();
-
         for(i=0;i<WaveFiles.length;i++){
             wav = new wavefile.WaveFile();
             wav.fromBuffer(new Buffer.from(WaveFiles[i], 'hex'));
-            ReturnSamples.push(wav.getSamples());
+            WaveSamples = wav.getSamples();
+            if(WaveSamples.length >= 2 && WaveSamples.length <= 10){
+                ReturnSamples.push(WaveSamples[0])
+            } else {
+                ReturnSamples.push();
+            }
         }
 
         return ReturnSamples;
