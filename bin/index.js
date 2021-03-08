@@ -166,7 +166,7 @@ function SpeechWriting()
 }
 
 function Ending(){
-    console.log(`Ending...`);
+    console.log(`Closing...`);
 }
 
 SetupProcess();
