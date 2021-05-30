@@ -67,7 +67,7 @@ module.exports = {
     },
 
     DefineCPB: async function() {
-        return await input.select(`What is your CPB? (Charaters Per Blip)`, [`Automatic`, `1`, `2`, `3`, `4`, `5`]);
+        return await input.select(`What is your CPB? (Charaters Per Blip)`, [`Automatic`, `Fixed (3)`, `Fixed (5)`, `1`, `2`, `3`, `4`, `5`]);
     },
 
     SwaveFolder: async function() {

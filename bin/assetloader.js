@@ -44,13 +44,15 @@ module.exports = {
     },
 
     CPBPrepare: function(CPBType, TextLength){
-        if(CPBType == `Automatic`)
-        {
-            return parseInt(Math.ceil(1+(TextLength/30)));
-        }
-        else
-        {
-            return parseInt(CPBType, 10);
+        switch(CPBType){
+            case `Automatic`:
+                return parseInt(Math.ceil(1+(TextLength/30)));
+            case `Fixed (3)`:
+                return parseInt(Math.ceil((TextLength/3)));
+            case `Fixed (5)`:
+                return parseInt(Math.ceil((TextLength/5)));
+            default:
+                return parseInt(CPBType, 10);
         }
     }
 }
